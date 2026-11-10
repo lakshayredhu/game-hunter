@@ -1,0 +1,325 @@
+import type { Puzzle } from "./types";
+
+export const puzzles: Puzzle[] = [
+  {
+    id: "loop-boundary",
+    level: 1,
+    code: [
+      "const colors = ['red', 'blue', 'green'];",
+      "for (let i = 0; i <= colors.length; i++) {",
+      "  console.log(colors[i]);",
+      "}",
+      "console.log('Done');",
+    ],
+    bugLine: 1,
+    explanation:
+      "Array indexes stop one before the array length, so this loop runs once too many. Use `<` to keep every index valid.",
+    fix: "for (let i = 0; i < colors.length; i++) {",
+  },
+  {
+    id: "strict-equality",
+    level: 1,
+    code: [
+      "const answer = 7;",
+      "let guess = 5;",
+      "guess = Number(prompt('Guess a number'));",
+      "if (guess = answer) {",
+      "  console.log('Correct!');",
+      "}",
+    ],
+    bugLine: 3,
+    explanation:
+      "A single `=` assigns the answer to `guess` instead of comparing the two values. Use `===` to check whether they match.",
+    fix: "if (guess === answer) {",
+  },
+  {
+    id: "missing-return-value",
+    level: 1,
+    code: [
+      "function double(number) {",
+      "  const result = number * 2;",
+      "  return;",
+      "}",
+      "const answer = double(4);",
+      "console.log(answer);",
+    ],
+    bugLine: 2,
+    explanation:
+      "The function returns without giving back its calculated result, so `answer` becomes `undefined`. Return `result` instead.",
+    fix: "  return result;",
+  },
+  {
+    id: "wrong-variable",
+    level: 1,
+    code: [
+      "const price = 10;",
+      "const tax = 2;",
+      "function finalPrice() {",
+      "  return price + discount;",
+      "}",
+      "console.log(finalPrice());",
+    ],
+    bugLine: 4,
+    explanation:
+      "The final price should include the tax, but this line adds the discount instead. Replace `discount` with `tax`.",
+    fix: "  return price + tax;",
+  },
+  {
+    id: "missing-await",
+    level: 1,
+    code: [
+      "async function fetchUser(id) {",
+      "  return { name: `Player ${id}` };",
+      "}",
+      "async function showName(id) {",
+      "  const user = fetchUser(id);",
+      "  console.log(user.name);",
+      "}",
+      "showName(3);",
+    ],
+    bugLine: 4,
+    explanation:
+      "`fetchUser` returns a promise, so `user` is not the loaded user yet. Add `await` before using its name.",
+    fix: "  const user = await fetchUser(id);",
+  },
+  {
+    id: "convert-text-to-number",
+    level: 1,
+    code: [
+      "const price = '12';",
+      "const quantity = 3;",
+      "const total = price + quantity;",
+      "console.log(total);",
+      "console.log(typeof total);",
+    ],
+    bugLine: 2,
+    explanation:
+      "Because `price` is text, `+` joins it with `quantity` and produces `'123'`. Convert the price to a number before adding.",
+    fix: "const total = Number(price) + quantity;",
+  },
+  {
+    id: "first-array-item",
+    level: 1,
+    code: [
+      "const pets = ['cat', 'dog', 'bird'];",
+      "const firstPet = pets[1];",
+      "console.log(firstPet);",
+      "const petCount = pets.length;",
+      "console.log(petCount);",
+    ],
+    bugLine: 1,
+    explanation:
+      "JavaScript arrays start at index `0`, so index `1` selects the second pet. Use index `0` for the first item.",
+    fix: "const firstPet = pets[0];",
+  },
+  {
+    id: "include-boundary",
+    level: 1,
+    code: [
+      "const age = 18;",
+      "function canVote(personAge) {",
+      "  if (personAge > 18) {",
+      "    return true;",
+      "  }",
+      "  return false;",
+      "}",
+    ],
+    bugLine: 2,
+    explanation:
+      "This rule should include people who are exactly 18, but `>` excludes them. Use `>=` to include the boundary age.",
+    fix: "  if (personAge >= 18) {",
+  },
+  {
+    id: "add-not-multiply",
+    level: 1,
+    code: [
+      "const apples = 3;",
+      "const oranges = 2;",
+      "function countFruit(first, second) {",
+      "  return first * second;",
+      "}",
+      "console.log(countFruit(apples, oranges));",
+    ],
+    bugLine: 3,
+    explanation:
+      "To count both groups of fruit, their quantities must be added together. Multiplication gives the wrong total.",
+    fix: "  return first + second;",
+  },
+  {
+    id: "parse-whole-number",
+    level: 1,
+    code: [
+      "const priceText = '12.50';",
+      "function readPrice(text) {",
+      "  return parseInt(text, 10);",
+      "}",
+      "const price = readPrice(priceText);",
+      "console.log(price);",
+    ],
+    bugLine: 2,
+    explanation:
+      "`parseInt` drops everything after the decimal point, so this loses part of the price. Use `Number` to keep the decimal value.",
+    fix: "  return Number(text);",
+  },
+  {
+    id: "correct-object-property",
+    level: 2,
+    code: [
+      "const user = { firstName: 'Ari', age: 12 };",
+      "function getName(person) {",
+      "  return person.name;",
+      "}",
+      "const name = getName(user);",
+      "console.log(name);",
+    ],
+    bugLine: 2,
+    explanation:
+      "The object stores the name in `firstName`, not `name`, so this reads an undefined property. Use the property that actually exists.",
+    fix: "  return person.firstName;",
+  },
+  {
+    id: "numeric-sort",
+    level: 2,
+    code: [
+      "const scores = [8, 30, 2];",
+      "function sortScores(values) {",
+      "  return values.sort();",
+      "}",
+      "const sorted = sortScores(scores);",
+      "console.log(sorted);",
+    ],
+    bugLine: 2,
+    explanation:
+      "Without a comparison function, `sort()` orders numbers like text, putting `30` before `8`. Compare the numbers to sort them numerically.",
+    fix: "  return values.sort((a, b) => a - b);",
+  },
+  {
+    id: "filter-active-items",
+    level: 2,
+    code: [
+      "const tasks = [",
+      "  { title: 'Read', active: true },",
+      "  { title: 'Walk', active: false },",
+      "];",
+      "const activeTasks = tasks.filter((task) => task.active === false);",
+      "console.log(activeTasks.length);",
+    ],
+    bugLine: 4,
+    explanation:
+      "This condition selects inactive tasks even though the result is named `activeTasks`. Check for `true` to keep only active tasks.",
+    fix: "const activeTasks = tasks.filter((task) => task.active === true);",
+  },
+  {
+    id: "case-insensitive-search",
+    level: 2,
+    code: [
+      "const names = ['Lena', 'Omar', 'Bea'];",
+      "function hasName(list, search) {",
+      "  return list.some((name) => name === search);",
+      "}",
+      "console.log(hasName(names, 'lena'));",
+      "console.log('Search finished');",
+    ],
+    bugLine: 2,
+    explanation:
+      "The stored name begins with an uppercase letter, but the search is lowercase. Compare lowercase versions so letter case does not matter.",
+    fix: "  return list.some((name) => name.toLowerCase() === search.toLowerCase());",
+  },
+  {
+    id: "update-array-value",
+    level: 2,
+    code: [
+      "const points = [4, 7, 9];",
+      "function addBonus(values) {",
+      "  values[3] = values[1] + 2;",
+      "  return values;",
+      "}",
+      "console.log(addBonus(points));",
+    ],
+    bugLine: 2,
+    explanation:
+      "The second value is at index `1`; index `3` adds a new fourth item instead of updating it. Use index `1` on the left side.",
+    fix: "  values[1] = values[1] + 2;",
+  },
+  {
+    id: "logical-and",
+    level: 2,
+    code: [
+      "const temperature = 22;",
+      "const isSunny = true;",
+      "function isGoodPicnicWeather(temp, sunny) {",
+      "  return temp >= 20 || sunny;",
+      "}",
+      "console.log(isGoodPicnicWeather(temperature, isSunny));",
+    ],
+    bugLine: 3,
+    explanation:
+      "A picnic needs both warm weather and sunshine, but `||` accepts either one by itself. Use `&&` to require both conditions.",
+    fix: "  return temp >= 20 && sunny;",
+  },
+  {
+    id: "use-current-item",
+    level: 2,
+    code: [
+      "const numbers = [2, 4, 6];",
+      "const doubled = [];",
+      "for (let i = 0; i < numbers.length; i++) {",
+      "  doubled.push(numbers[0] * 2);",
+      "}",
+      "console.log(doubled);",
+    ],
+    bugLine: 3,
+    explanation:
+      "The loop should double the value at the current index, but it repeats the first value each time. Use `numbers[i]`.",
+    fix: "  doubled.push(numbers[i] * 2);",
+  },
+  {
+    id: "subtract-one",
+    level: 3,
+    code: [
+      "function countDown(start) {",
+      "  const numbers = [];",
+      "  for (let value = start; value > 0; value++) {",
+      "    numbers.push(value);",
+      "  }",
+      "  return numbers;",
+      "}",
+    ],
+    bugLine: 2,
+    explanation:
+      "The loop moves `value` farther from zero on every pass, so it never finishes for a positive start. Count down by subtracting one.",
+    fix: "  for (let value = start; value > 0; value--) {",
+  },
+  {
+    id: "parse-json",
+    level: 3,
+    code: [
+      "const savedText = '{\"score\":12}';",
+      "function getScore(text) {",
+      "  const saved = JSON.stringify(text);",
+      "  return saved.score;",
+      "}",
+      "console.log(getScore(savedText));",
+    ],
+    bugLine: 2,
+    explanation:
+      "`savedText` is JSON text that needs to become an object, but `stringify` turns a value into text. Use `JSON.parse` to read the saved score.",
+    fix: "  const saved = JSON.parse(text);",
+  },
+  {
+    id: "average-denominator",
+    level: 3,
+    code: [
+      "const scores = [6, 8, 10];",
+      "function average(values) {",
+      "  const total = values.reduce((sum, value) => sum + value, 0);",
+      "  return total / (values.length - 1);",
+      "}",
+      "console.log(average(scores));",
+    ],
+    bugLine: 3,
+    explanation:
+      "The average is the total divided by the number of scores, not one less than that number. Divide by `values.length`.",
+    fix: "  return total / values.length;",
+  },
+];
