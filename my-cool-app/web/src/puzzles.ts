@@ -130,6 +130,7 @@ export const puzzles: Puzzle[] = [
       "  }",
       "  return false;",
       "}",
+      "console.log(canVote(age));",
     ],
     bugLine: 2,
     explanation:

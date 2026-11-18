@@ -6,6 +6,15 @@ import type { Language, Puzzle } from "./types";
 type DifficultyFilter = "all" | Puzzle["level"];
 type Theme = "light" | "dark";
 
+function getSavedTheme(): Theme {
+  try {
+    return localStorage.getItem("bug-hunter-theme") === "dark" ? "dark" : "light";
+  } catch (error) {
+    console.warn("Unable to read the saved theme preference.", error);
+    return "light";
+  }
+}
+
 const keywordPattern =
   /\b(?:const|let|var|function|return|if|else|for|while|async|await|new|true|false|null|undefined|typeof|of|in|import|from|class|def|print|and|or|not|None|range|len|sum)\b/;
 const tokenPattern =
@@ -76,14 +85,17 @@ function App() {
   const [wrongLines, setWrongLines] = useState<number[]>([]);
   const [solved, setSolved] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [theme, setTheme] = useState<Theme>(() =>
-    localStorage.getItem("bug-hunter-theme") === "dark" ? "dark" : "light",
-  );
+  const [theme, setTheme] = useState<Theme>(getSavedTheme);
+  const hasWon = score >= 10;
   const puzzle = puzzles[puzzleIndex];
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem("bug-hunter-theme", theme);
+    try {
+      localStorage.setItem("bug-hunter-theme", theme);
+    } catch (error) {
+      console.warn("Unable to save the theme preference.", error);
+    }
   }, [theme]);
 
   const chooseLine = (lineIndex: number) => {
@@ -205,7 +217,7 @@ function App() {
               </span>
             </div>
             <div className="mb-1 flex items-center justify-between text-xs text-muted">
-              <span>Progress to 10 points</span>
+              <span>{hasWon ? "Game complete" : "Progress to 10 points"}</span>
               <span>{score} / 10</span>
             </div>
             <div
@@ -328,12 +340,28 @@ function App() {
                 Mistakes on this puzzle: {mistakes}
               </p>
               {solved ? (
-                <div className="mt-3">
-                  <GameButton onClick={nextPuzzle} block>
-                    Next puzzle
-                  </GameButton>
-                </div>
+                score < 10 ? (
+                  <div className="mt-3">
+                    <GameButton onClick={nextPuzzle} block>
+                      Next puzzle
+                    </GameButton>
+                  </div>
+                ) : null
               ) : null}
+            </section>
+          ) : null}
+
+          {hasWon ? (
+            <section
+              aria-live="polite"
+              className="mt-3 rounded-2xl border border-success bg-success/10 p-3 text-center"
+            >
+              <p className="m-0 font-semibold text-success">
+                You reached 10 points. Great job!
+              </p>
+              <GameButton onClick={() => resetGame()} block>
+                Play again
+              </GameButton>
             </section>
           ) : null}
 
@@ -352,7 +380,7 @@ function App() {
                 Play again
               </GameButton>
             </section>
-          ) : !solved ? (
+          ) : !solved && !hasWon ? (
             <p aria-live="polite" className="mb-0 mt-3 text-center text-sm text-muted [@media(max-height:400px)]:mt-1">
               Tap the buggy line. Wrong guesses cost one life.
               {wrongLines.length > 0
