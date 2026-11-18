@@ -15,6 +15,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "Array indexes stop one before the array length, so this loop runs once too many. Use `<` to keep every index valid.",
     fix: "for (let i = 0; i < colors.length; i++) {",
+    expectedOutput: "red\nblue\ngreen\nDone",
   },
   {
     id: "strict-equality",
@@ -31,6 +32,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "A single `=` assigns the answer to `guess` instead of comparing the two values. Use `===` to check whether they match.",
     fix: "if (guess === answer) {",
+    expectedOutput: "Correct! (when the guess is 7)",
   },
   {
     id: "missing-return-value",
@@ -47,6 +49,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "The function returns without giving back its calculated result, so `answer` becomes `undefined`. Return `result` instead.",
     fix: "  return result;",
+    expectedOutput: "8",
   },
   {
     id: "wrong-variable",
@@ -63,6 +66,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "The final price should include the tax, but this line adds the discount instead. Replace `discount` with `tax`.",
     fix: "  return price + tax;",
+    expectedOutput: "12",
   },
   {
     id: "missing-await",
@@ -81,6 +85,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "`fetchUser` returns a promise, so `user` is not the loaded user yet. Add `await` before using its name.",
     fix: "  const user = await fetchUser(id);",
+    expectedOutput: "Player 3",
   },
   {
     id: "convert-text-to-number",
@@ -96,6 +101,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "Because `price` is text, `+` joins it with `quantity` and produces `'123'`. Convert the price to a number before adding.",
     fix: "const total = Number(price) + quantity;",
+    expectedOutput: "15\nnumber",
   },
   {
     id: "first-array-item",
@@ -111,6 +117,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "JavaScript arrays start at index `0`, so index `1` selects the second pet. Use index `0` for the first item.",
     fix: "const firstPet = pets[0];",
+    expectedOutput: "cat\n3",
   },
   {
     id: "include-boundary",
@@ -128,6 +135,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "This rule should include people who are exactly 18, but `>` excludes them. Use `>=` to include the boundary age.",
     fix: "  if (personAge >= 18) {",
+    expectedOutput: "true",
   },
   {
     id: "add-not-multiply",
@@ -144,6 +152,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "To count both groups of fruit, their quantities must be added together. Multiplication gives the wrong total.",
     fix: "  return first + second;",
+    expectedOutput: "5",
   },
   {
     id: "parse-whole-number",
@@ -160,6 +169,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "`parseInt` drops everything after the decimal point, so this loses part of the price. Use `Number` to keep the decimal value.",
     fix: "  return Number(text);",
+    expectedOutput: "12.5",
   },
   {
     id: "correct-object-property",
@@ -176,6 +186,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "The object stores the name in `firstName`, not `name`, so this reads an undefined property. Use the property that actually exists.",
     fix: "  return person.firstName;",
+    expectedOutput: "Ari",
   },
   {
     id: "numeric-sort",
@@ -192,6 +203,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "Without a comparison function, `sort()` orders numbers like text, putting `30` before `8`. Compare the numbers to sort them numerically.",
     fix: "  return values.sort((a, b) => a - b);",
+    expectedOutput: "[2, 8, 30]",
   },
   {
     id: "filter-active-items",
@@ -208,6 +220,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "This condition selects inactive tasks even though the result is named `activeTasks`. Check for `true` to keep only active tasks.",
     fix: "const activeTasks = tasks.filter((task) => task.active === true);",
+    expectedOutput: "1",
   },
   {
     id: "case-insensitive-search",
@@ -224,6 +237,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "The stored name begins with an uppercase letter, but the search is lowercase. Compare lowercase versions so letter case does not matter.",
     fix: "  return list.some((name) => name.toLowerCase() === search.toLowerCase());",
+    expectedOutput: "true\nSearch finished",
   },
   {
     id: "update-array-value",
@@ -240,6 +254,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "The second value is at index `1`; index `3` adds a new fourth item instead of updating it. Use index `1` on the left side.",
     fix: "  values[1] = values[1] + 2;",
+    expectedOutput: "[4, 9, 9]",
   },
   {
     id: "logical-and",
@@ -256,6 +271,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "A picnic needs both warm weather and sunshine, but `||` accepts either one by itself. Use `&&` to require both conditions.",
     fix: "  return temp >= 20 && sunny;",
+    expectedOutput: "true",
   },
   {
     id: "use-current-item",
@@ -272,6 +288,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "The loop should double the value at the current index, but it repeats the first value each time. Use `numbers[i]`.",
     fix: "  doubled.push(numbers[i] * 2);",
+    expectedOutput: "[4, 8, 12]",
   },
   {
     id: "subtract-one",
@@ -284,11 +301,13 @@ export const puzzles: Puzzle[] = [
       "  }",
       "  return numbers;",
       "}",
+      "console.log(countDown(3));",
     ],
     bugLine: 2,
     explanation:
       "The loop moves `value` farther from zero on every pass, so it never finishes for a positive start. Count down by subtracting one.",
     fix: "  for (let value = start; value > 0; value--) {",
+    expectedOutput: "[3, 2, 1]",
   },
   {
     id: "parse-json",
@@ -305,6 +324,7 @@ export const puzzles: Puzzle[] = [
     explanation:
       "`savedText` is JSON text that needs to become an object, but `stringify` turns a value into text. Use `JSON.parse` to read the saved score.",
     fix: "  const saved = JSON.parse(text);",
+    expectedOutput: "12",
   },
   {
     id: "average-denominator",
@@ -321,5 +341,72 @@ export const puzzles: Puzzle[] = [
     explanation:
       "The average is the total divided by the number of scores, not one less than that number. Divide by `values.length`.",
     fix: "  return total / values.length;",
+    expectedOutput: "8",
+  },
+  {
+    id: "python-loop-boundary",
+    language: "Python",
+    level: 1,
+    code: [
+      "colors = ['red', 'blue', 'green']",
+      "for i in range(len(colors) + 1):",
+      "    print(colors[i])",
+      "print('Done')",
+    ],
+    bugLine: 1,
+    explanation:
+      "`range(len(colors) + 1)` creates one extra index. Use `range(len(colors))` so every index belongs to the list.",
+    fix: "for i in range(len(colors)):",
+    expectedOutput: "red\nblue\ngreen\nDone",
+  },
+  {
+    id: "python-equality",
+    language: "Python",
+    level: 1,
+    code: [
+      "answer = 7",
+      "guess = 5",
+      "if guess = answer:",
+      "    print('Correct!')",
+      "else:",
+      "    print('Try again')",
+    ],
+    bugLine: 2,
+    explanation:
+      "A single `=` is assignment syntax and cannot be used for a comparison in Python. Use `==` to compare the values.",
+    fix: "if guess == answer:",
+    expectedOutput: "Try again",
+  },
+  {
+    id: "python-average",
+    language: "Python",
+    level: 2,
+    code: [
+      "scores = [6, 8, 10]",
+      "total = sum(scores)",
+      "average = total / (len(scores) - 1)",
+      "print(average)",
+    ],
+    bugLine: 2,
+    explanation:
+      "The average divides the total by one less than the number of scores. Divide by the full list length instead.",
+    fix: "average = total / len(scores)",
+    expectedOutput: "8.0",
+  },
+  {
+    id: "python-dictionary-key",
+    language: "Python",
+    level: 3,
+    code: [
+      "saved = {'score': 12}",
+      "def get_score(data):",
+      "    return data['points']",
+      "print(get_score(saved))",
+    ],
+    bugLine: 2,
+    explanation:
+      "The dictionary contains the key `score`, not `points`. Access the key that was actually saved.",
+    fix: "    return data['score']",
+    expectedOutput: "12",
   },
 ];
